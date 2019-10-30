@@ -1,5 +1,5 @@
 /*
- *   Obscure Tardises' Exterior Main file
+ *   Obscure Tardises' HUD API
  *   Copyright (C) 2019  EthbotBot
 
  *   This program is free software: you can redistribute it and/or modify
@@ -16,12 +16,10 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-integer lockchan = 7038329; //For locking when materializing/dematerializing.
-integer operationschan = -743630; //"t60" in Hex.
-integer lightchannel = -7104884; //For the lights.
-integer portchan = 1952803941;
+#include "IDs.lsl"
+#include "Messages.lsl"
 
-key URL_REQUEST_ID; //Formatted like a constant, yet it changes.
+key URL_REQUEST_ID; //TODO: Formatted like a constant, yet it changes.
 
 //Urls
 string selfURL;
@@ -33,20 +31,6 @@ REQUEST_URL(){
     URL_REQUEST_ID = llRequestURL();
 }
 
-SEND_MESSAGE(integer CHANNEL, string MESSAGE_ATTACHMENT, string MESSAGE_TYPE, string MESSAGE_CONTENT)
- {
-    string Message = llList2Json(JSON_OBJECT,["MessageType",MESSAGE_TYPE,"MessageAttachment",MESSAGE_ATTACHMENT,"MessageContent",MESSAGE_CONTENT]);
-    llOwnerSay("DBUG: "+(string)CHANNEL+" : "+Message);
-    llRegionSay(CHANNEL,Message);
-}
-
-SEND_HTTP_MESSAGE(string URL, string MESSAGE_ATTACHMENT, string MESSAGE_TYPE, string MESSAGE_CONTENT)
-{
-     string Message = llList2Json(JSON_OBJECT,["MessageType",MESSAGE_TYPE,"MessageAttachment",MESSAGE_ATTACHMENT,"MessageContent",MESSAGE_CONTENT]);
-    llOwnerSay("DBUG: "+(string)URL+" : "+Message);
-    llHTTPRequest(URL,[HTTP_METHOD,"POST"],Message);
-}
-
 default
 {
     on_rez(integer start_param)
@@ -56,9 +40,7 @@ default
     
     state_entry()
     {
-        string Message = llList2Json(JSON_OBJECT,["MessageType","Information","MessageContent","Testing..."]);
-        llOwnerSay(Message);
-        llRegionSay(operationschan,Message);
+
         REQUEST_URL();
         
         llListen(operationschan, "", NULL_KEY, "");
@@ -71,6 +53,10 @@ default
         {
             llOwnerSay("DBUG : API : "+message);
             SEND_HTTP_MESSAGE(extURL,"","Action",llJsonGetValue(message,["MessageContent"]));
+        }
+        else if (extURL == "")
+        {
+            llOwnerSay("DBUG : API : Action sent, yet no id?");
         }
     }
     

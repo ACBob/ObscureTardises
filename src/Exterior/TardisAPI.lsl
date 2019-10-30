@@ -16,10 +16,7 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-integer lockchan = 7038329; //For locking when materializing/dematerializing.
-integer operationschan = -743630; //"t60" in Hex.
-integer lightchannel = -7104884; //For the lights.
-integer portchan = 1952803941;
+#include "IDs.lsl"
 
 key URL_REQUEST_ID; //Formatted like a constant, yet it changes.
 
@@ -30,27 +27,6 @@ string hudURL; //Hud is like a messanger. We don't store the Console, the hud do
 REQUEST_URL(){
     llOwnerSay("DBUG: Requesting URL.");
     URL_REQUEST_ID = llRequestURL();
-}
-
-SEND_MESSAGE(integer CHANNEL, string MESSAGE_ATTACHMENT, string MESSAGE_TYPE, string MESSAGE_CONTENT)
- {
-    string Message = llList2Json(JSON_OBJECT,["MessageType",MESSAGE_TYPE,"MessageAttachment",MESSAGE_ATTACHMENT,"MessageContent",MESSAGE_CONTENT]);
-    llOwnerSay("DBUG: "+(string)CHANNEL+" : "+Message);
-    llRegionSay(CHANNEL,Message);
-}
-
-SEND_HTTP_MESSAGE(string URL, string MESSAGE_ATTACHMENT, string MESSAGE_TYPE, string MESSAGE_CONTENT)
-{
-     string Message = llList2Json(JSON_OBJECT,["MessageType",MESSAGE_TYPE,"MessageAttachment",MESSAGE_ATTACHMENT,"MessageContent",MESSAGE_CONTENT]);
-    llOwnerSay("DBUG: "+(string)URL+" : "+Message);
-    llHTTPRequest(URL,[HTTP_METHOD,"POST"],Message);
-}
-
-SEND_SCRIPT_MESSAGE(string MESSAGE_ATTACHMENT, string MESSAGE_TYPE, string MESSAGE_CONTENT)
-{
-    string Message = llList2Json(JSON_OBJECT,["MessageType",MESSAGE_TYPE,"MessageAttachment",MESSAGE_ATTACHMENT,"MessageContent",MESSAGE_CONTENT]);
-    llOwnerSay("DBUG: "+" : "+Message);
-    llMessageLinked(LINK_THIS,0,Message,"");
 }
 
 default

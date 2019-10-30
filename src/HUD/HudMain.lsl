@@ -1,5 +1,5 @@
 /*
- *   Obscure Tardises' Exterior Main file
+ *   Obscure Tardises' HUD Main file
  *   Copyright (C) 2019  EthbotBot
 
  *   This program is free software: you can redistribute it and/or modify
@@ -58,12 +58,7 @@ ShowHelp(){
     < - Previous Page.");
 }
 
-SEND_SCRIPT_MESSAGE(string MESSAGE_ATTACHMENT, string MESSAGE_TYPE, string MESSAGE_CONTENT)
-{
-    string Message = llList2Json(JSON_OBJECT,["MessageType",MESSAGE_TYPE,"MessageAttachment",MESSAGE_ATTACHMENT,"MessageContent",MESSAGE_CONTENT]);
-    llOwnerSay("DBUG: "+" : "+Message);
-    llMessageLinked(LINK_THIS,0,Message,"");
-}
+#include "Messages.lsl"
 
 default
 {
